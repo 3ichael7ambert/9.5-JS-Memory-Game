@@ -1,7 +1,35 @@
+body {
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: darkolivegreen;
+    color:bisque;
+}
+
 #game div {
-    border: 1px solid black;
+    border: 1px solid bisque;
     width: 15%;
     height: 200px;
-    margin: 10px;
+    margin: 15px;
+    padding:15px;
+    display: inline-block;
+    transition:all 500ms;
+    border-radius: 15px;
+    background: linear-gradient(olive,olivedrab);
+
+  }
+
+
+#game div:hover {
+    border: 3px solid burlywood;
+    width: 15%;
+    height: 200px;
     display: inline-block;
   }
+
+  h1 {
+    text-align: center;
+    transition:all 2000ms;
+    position:relative;
+  }
+
+
+  
