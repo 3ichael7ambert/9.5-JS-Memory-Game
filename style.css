@@ -2,6 +2,8 @@ body {
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background-color: darkolivegreen;
     color:bisque;
+/* DIV flip */
+    perspective: 1000px;
 }
 
 #game div {
@@ -14,15 +16,22 @@ body {
     transition:all 500ms;
     border-radius: 15px;
     background: linear-gradient(olive,olivedrab);
+  /* D div.flip */
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    /* Hidden sides */
+    /* backface-visibility: hidden; */
 
   }
 
 
 #game div:hover {
-    border: 3px solid burlywood;
+    border: 1px solid burlywood;
     width: 15%;
     height: 200px;
-    display: inline-block;
+
+    transform: scale(1.03);
+    transition: transform .2s;
   }
 
   h1 {
@@ -31,5 +40,35 @@ body {
     position:relative;
   }
 
+/* creates click effect */
+  #game div:active {
+    transform: scale(0.97);
+    transition: transform .2s;
+  }
+
+  /* Flipping animation */
+  #game div.flip {
+    transform: rotateY(180deg);
+  }
+
+
+
+
+
+
 
   
+  .front-face,
+.back-face {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  position: absolute;
+  border-radius: 5px;
+  background: #1C7CCC;
+ /* backface-visibility: hidden; */
+}
+  
+.front-face {
+  transform: rotateY(180deg);
+}
