@@ -4,8 +4,14 @@ body {
     color:bisque;
 /* DIV flip */
     perspective: 1000px;
+    margin:0px auto;
+    transition:all 1000ms;
 }
 
+#game {
+  text-align: center;
+  margin: 0 auto;
+}
 #game div {
     border: 1px solid bisque;
     width: 15%;
@@ -47,7 +53,7 @@ body {
   }
 
   /* Flipping animation */
-  #game div.flip {
+  #game div.flipped {
     transform: rotateY(180deg);
   }
 
@@ -72,3 +78,4 @@ body {
 .front-face {
   transform: rotateY(180deg);
 }
+

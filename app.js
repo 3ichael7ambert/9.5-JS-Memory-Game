@@ -1,37 +1,39 @@
 const gameContainer = document.getElementById("game");
-//const h1 = document.getElementByTag("h1");
 
-// let wiggles = true;
-// while (wiggle)
-// {
-//   setTimeout(h1.style.right="100px",1000);
-//   wiggle=false;
-// }
-// while (!wiggle)
-// {
-//   setTimeout(h1.style.left="100px",1000);
-//   wiggle=true;
-// }
 
-// function randomRGB() {
+/////
+let card1 = null;
+let card2 = null;
+let cardsFlipped = 0;
+let noClicking = false;
+////
 
-//     const r = Math.floor(Math.random() *256);
-//     const g = Math.floor(Math.random() *256);
-//     const b = Math.floor(Math.random() *256);
+let countdown =0;
+let clickCount=0;
 
-//     return `rgb(${r},${g},${b})`
 
-// }
+////////////////////////////
+/////Header change color
+//////////////////////////////
+function randomRGB() {
+    const r = Math.floor(Math.random() *256);
+    const g = Math.floor(Math.random() *256);
+    const b = Math.floor(Math.random() *256);
+    return `rgb(${r},${g},${b})`
+}
+const letters = document.querySelectorAll('.letter');
+setInterval(function () {
+    for (let letter of letters) {
+        letter.style.color = randomRGB();
 
-// const letters = document.querySelectorAll('.letter');
+    }
+},500)
 
-// setInterval(function () {
-//     for (let letter of letters) {
-//         letter.style.color = randomRGB();
+//counter
+setInterval (function () {countdown+=1;},1000);
 
-//     }
-// },500)
 
+////////////
 
 const COLORS = [
   "red",
@@ -46,81 +48,111 @@ const COLORS = [
   "purple"
 ];
 
-// here is a helper function to shuffle an array
-// it returns the same array with values shuffled
-// it is based on an algorithm called Fisher Yates if you want ot research more
+// SHuffle  array
 function shuffle(array) {
   let counter = array.length;
-
   // While there are elements in the array
   while (counter > 0) {
     // Pick a random index
     let index = Math.floor(Math.random() * counter);
-
     // Decrease counter by 1
     counter--;
-
     // And swap the last element with it
     let temp = array[counter];
     array[counter] = array[index];
     array[index] = temp;
   }
-
   return array;
 }
-
 let shuffledColors = shuffle(COLORS);
 
 
-// this function loops over the array of colors
-// it creates a new div and gives it a class with the value of the color
-// it also adds an event listener for a click for each card
+//creates div based on array
 function createDivsForColors(colorArray) {
   for (let color of colorArray) {
     // create a new div
     const newDiv = document.createElement("div");
-
     // give it a class attribute for the value we are looping over
     newDiv.classList.add(color);
-
     // call a function handleCardClick when a div is clicked on
     newDiv.addEventListener("click", handleCardClick);
-
     // append the div to the element with an id of game
     gameContainer.append(newDiv);
   }
 }
 
-// function createDivsForColors(colorArray) {
-//   for (let color of colorArray) {
-//     // create a new div
-//     const newDiv = document.createElement("div");
-//     const newFront = document.createElement("div");
-//     const newBack = document.createElement("div");
-//     // give it a class attribute for the value we are looping over
-//     newDiv.classList.add(color);
-//     newFront.className.add("front-face");
-//     newBack.className.add("back-face");
-//     // call a function handleCardClick when a div is clicked on
-//     newDiv.addEventListener("click", handleCardClick);
 
-//     // append the div to the element with an id of game
-//     gameContainer.append(newDiv);
-//     newDiv.append(newFront);
-//     newDiv.append(newBack);
-//   }
-// }
 
+///////////////////////////
 function flipBack(event) {
-  event.target.style.background = "linear-gradient(olive,olivedrab)";
-}
+  // event.target.style.background = "linear-gradient(olive,olivedrab)";
+} ////
+
 // TODO: Implement this function!
-function handleCardClick(event) {
+function handleCardClick(e) {
   // you can use event.target to see which element was clicked
-  console.log("you just clicked", event.target);
-  if (event.target.style.background="linear-gradient(olive,olivedrab"){
-  event.target.style.background = event.target.className;////////
+  // console.log("you just clicked", event.target);
+
+
+  // if (e.target.style.background="linear-gradient(olive,olivedrab"){
+  //   e.target.style.background = e.target.className;////////
+  //   }
+
+//////////////////
+  if (noClicking) return;
+  if (e.target.classList.contains("flipped")) return;
+  clickCount+=1;
+  let currentCard = e.target;
+  // currentCard.style.backgroundColor = currentCard.classList[0];
+  currentCard.style.background = e.target.className;
+
+  if (!card1 || !card2) {
+    currentCard.classList.add("flipped");
+    card1 = card1 || currentCard;
+    card2 = currentCard === card1 ? null : currentCard;
   }
+
+  if (card1 && card2) {
+    noClicking = true;
+    // debugger
+    let gif1 = card1.className;
+    let gif2 = card2.className;
+
+    if (gif1 === gif2) {
+      cardsFlipped += 2;
+      card1.removeEventListener("click", handleCardClick);
+      card2.removeEventListener("click", handleCardClick);
+      card1 = null;
+      card2 = null;
+      noClicking = false;
+    } else {
+      setTimeout(function() {
+        card1.style.backgroundColor = "";
+        card2.style.backgroundColor = "";
+        card1.classList.toggle("flipped");
+        card1.style.background="linear-gradient(olive,olivedrab";
+        card2.style.background="linear-gradient(olive,olivedrab";
+        card2.classList.remove("flipped");
+        card1 = null;
+        card2 = null;
+        noClicking = false;
+      }, 1000);
+    }
+  }
+
+
+function count(){
+  countdown+=1;
+  return countdown;
+}
+
+
+setInterval(count(),1);
+
+  if (cardsFlipped === COLORS.length) alert(`You Won, in ${countdown} seconds and you guessed ${clickCount} times.`);
+///////////////////////////////////////////
+
+
   // let cardBack = document.createElement("div");
   //     cardBack.className = "back-face";
   //     cardBack.style.background = event.target.className;
@@ -137,13 +169,21 @@ function handleCardClick(event) {
 // when the DOM loads
 createDivsForColors(shuffledColors);
 
-///
+/////////////////////////////////////
 //flipping effect
 ///
-const cards = document.querySelectorAll('#game div');
-function flipCard() {
-  this.classList.toggle('flip');
-}
+// const cards = document.querySelectorAll('#game div');
+// function flipCard() {
+//   this.classList.toggle('flip');
+// }
+
+// cards.forEach(card => card.addEventListener('click', flipCard));
+
+///////////////////////////////////
+
+
+
+
 // let hasFlippedCard = false;
 // let firstCard, secondCard;
 
@@ -186,7 +226,6 @@ function flipCard() {
 
 
 
-cards.forEach(card => card.addEventListener('click', flipCard));
 
 ///
 //Object to track if cards are flipped
@@ -199,3 +238,40 @@ cards.forEach(card => card.addEventListener('click', flipCard));
 // }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function createDivsForColors(colorArray) {
+//   for (let color of colorArray) {
+//     // create a new div
+//     const newDiv = document.createElement("div");
+//     const newFront = document.createElement("div");
+//     const newBack = document.createElement("div");
+//     // give it a class attribute for the value we are looping over
+//     newDiv.classList.add(color);
+//     newFront.className.add("front-face");
+//     newBack.className.add("back-face");
+//     // call a function handleCardClick when a div is clicked on
+//     newDiv.addEventListener("click", handleCardClick);
+
+//     // append the div to the element with an id of game
+//     gameContainer.append(newDiv);
+//     newDiv.append(newFront);
+//     newDiv.append(newBack);
+//   }
+// }
